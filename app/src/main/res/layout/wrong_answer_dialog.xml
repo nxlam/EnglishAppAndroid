@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp"
+    android:background="#CC2323">
+    <TextView
+        android:text="Bạn trả lời sai rồi.\nCố gắng lên!"
+        android:textSize="25sp"
+        android:gravity="center"
+        android:textColor="#fff"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"/>
+</LinearLayout>

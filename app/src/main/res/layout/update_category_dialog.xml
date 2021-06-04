@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_margin="20dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:text="Sửa danh mục"
+        android:textSize="25sp"
+        android:textColor="#FF0000"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <EditText
+        android:id="@+id/eCategoryName"
+        android:hint="Nhập tên"
+        android:layout_margin="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <LinearLayout
+        android:weightSum="2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/btUpdateCategory"
+            android:text="Sửa"
+            android:textColor="#FFAA00"
+            android:background="@drawable/button_update"
+            app:backgroundTint="@null"
+            android:layout_weight="1"
+            android:layout_marginHorizontal="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <Button
+            android:id="@+id/btCancelCategory"
+            android:text="Hủy"
+            android:textColor="#B300FF"
+            android:background="@drawable/button_delete"
+            app:backgroundTint="@null"
+            android:layout_weight="1"
+            android:layout_marginHorizontal="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+</LinearLayout>
