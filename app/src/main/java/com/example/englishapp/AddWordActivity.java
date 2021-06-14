@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,6 +23,7 @@ import com.example.englishapp.Model.Vocabulary;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.List;
 
 public class AddWordActivity extends AppCompatActivity {
     ImageView imgDemo;
@@ -51,8 +53,14 @@ public class AddWordActivity extends AppCompatActivity {
                 byte[] imgData = imageViewToByte();
                 String engsub = eEngsub.getText().toString();
                 String vietsub = eVietsub.getText().toString();
-                long res = helper.addVocabulary(new Vocabulary(categoryID, engsub, vietsub, imgData));
-                if (res > 0) finish();
+                List<Vocabulary> list = helper.getAll(categoryID);
+                //kiểm tra từ bị trùng
+                if (helper.checkVocabulary(engsub, vietsub))
+                    Toast.makeText(getApplicationContext(), "Từ bị trùng", Toast.LENGTH_SHORT).show();
+                else {
+                    long res = helper.addVocabulary(new Vocabulary(categoryID, engsub, vietsub, imgData));
+                    if (res > 0) finish();
+                }
             }
         });
         btCancelVocabulary.setOnClickListener(new View.OnClickListener() {
@@ -71,9 +79,9 @@ public class AddWordActivity extends AppCompatActivity {
         btCancelVocabulary = findViewById(R.id.btCancelVocabulary);
     }
 
-    //choose image
+    //chọn ảnh
     void imageChooser() {
-        Toast.makeText(getApplicationContext(), "Chọn ảnh nhỏ hơn 80KB", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getApplicationContext(), "Chọn ảnh nhỏ hơn 80KB", Toast.LENGTH_SHORT).show();
         Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
         startActivityForResult(gallery, SELECT_PICTURE);
     }
@@ -81,7 +89,6 @@ public class AddWordActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && requestCode == SELECT_PICTURE) {
-            // Get the uri of the image from data
             Uri selectedImageUri = data.getData();
             try {
                 InputStream inputStream = getContentResolver().openInputStream(selectedImageUri);
@@ -93,11 +100,15 @@ public class AddWordActivity extends AppCompatActivity {
         }
     }
 
-    //convert to save
     private byte[] imageViewToByte(){
         Bitmap bitmap = ((BitmapDrawable) imgDemo.getDrawable()).getBitmap();
+        //nén ảnh
+        float ratio = bitmap.getWidth()/bitmap.getHeight();
+        float dstWidth = bitmap.getWidth()-ratio*(bitmap.getHeight()-300);
+        Log.e("dstWidth", dstWidth+", ratio: " + ratio);
+        bitmap = Bitmap.createScaledBitmap(bitmap, (int) dstWidth, 300, false);
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        bitmap.compress(Bitmap.CompressFormat.PNG, 80, stream);
         byte[] byteArray = stream.toByteArray();
         return byteArray;
     }

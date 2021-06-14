@@ -54,6 +54,16 @@ public class VocabularySQLHelper extends SQLiteOpenHelper {
         return list;
     }
 
+    public boolean checkVocabulary(String engsub, String vietsub){
+        String whereClause = "engsub=? AND vietsub=?";
+        String[] whereArgs = {engsub, vietsub};
+        SQLiteDatabase sqLiteDatabase = getReadableDatabase();
+        Cursor cursor = sqLiteDatabase.query("tbl_vocabulary", null, whereClause, whereArgs, null, null, null);
+        if (cursor.moveToNext()){
+            return true;
+        } else return false;
+    }
+
     public int countVocabulary(int categoryID){
         List<Vocabulary> list = getAll(categoryID);
         if (list == null)

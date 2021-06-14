@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -25,6 +26,7 @@ import com.example.englishapp.R;
 import com.example.englishapp.quiz.QuizActivity;
 
 import java.io.Serializable;
+import java.text.ParseException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -42,6 +44,7 @@ public class GrammarFragment extends Fragment {
     VocabularySQLHelper vocabularySQLHelper;
     Spinner spCategory;
     Button btStartQuiz;
+    EditText eTotal;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -86,7 +89,6 @@ public class GrammarFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_grammar, container, false);
         helper = new CategorySQLHelper(getContext());
         vocabularySQLHelper = new VocabularySQLHelper(getContext());
@@ -96,13 +98,26 @@ public class GrammarFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Category category = (Category) spCategory.getSelectedItem();
-                if (vocabularySQLHelper.countVocabulary(category.getId()) < 4){
+                //kiểm tra số lượng từ của quiz
+                int total = vocabularySQLHelper.countVocabulary(category.getId());
+                if (total < 4){
                     Toast.makeText(getContext(), "Chủ đề phải có ít nhất 4 từ", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    Intent intent = new Intent(getContext(), QuizActivity.class);
-                    intent.putExtra("category_id", category.getId());
-                    startActivity(intent);
+                    try {
+                        //kiểm tra input
+                        total = Integer.parseInt(eTotal.getText().toString());
+                        if (total < 4) throw new Exception();
+                        else {
+                            Intent intent = new Intent(getContext(), QuizActivity.class);
+                            intent.putExtra("category_id", category.getId());
+                            //số lượng total của quiz
+                            intent.putExtra("total", total);
+                            startActivity(intent);
+                        }
+                    } catch (Exception e){
+                        Toast.makeText(getContext(), "Số câu hỏi không hợp lệ", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
@@ -121,6 +136,7 @@ public class GrammarFragment extends Fragment {
     private void initView() {
         spCategory = view.findViewById(R.id.spCategory);
         btStartQuiz = view.findViewById(R.id.btStartQuiz);
+        eTotal = view.findViewById(R.id.eTotal);
     }
 
     private void sortList(){
@@ -130,13 +146,5 @@ public class GrammarFragment extends Fragment {
                 return o1.getName().compareToIgnoreCase(o2.getName());
             }
         });
-    }
-
-    private class fetchDataTask extends AsyncTask<Void, String, String>{
-
-        @Override
-        protected String doInBackground(Void... voids) {
-            return null;
-        }
     }
 }

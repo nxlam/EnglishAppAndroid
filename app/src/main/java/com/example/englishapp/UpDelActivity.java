@@ -80,7 +80,6 @@ public class UpDelActivity extends AppCompatActivity {
         eVietsub.setText(vocabulary.getVietsub());
     }
 
-    //choose image
     void imageChooser() {
         Toast.makeText(getApplicationContext(), "Chọn ảnh nhỏ hơn 80KB", Toast.LENGTH_SHORT).show();
         Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
@@ -102,7 +101,6 @@ public class UpDelActivity extends AppCompatActivity {
         }
     }
 
-    //convert to save
     private byte[] imageViewToByte(){
         Bitmap bitmap = ((BitmapDrawable) imgDemo.getDrawable()).getBitmap();
         ByteArrayOutputStream stream = new ByteArrayOutputStream();

@@ -48,7 +48,7 @@ public class QuizActivity extends AppCompatActivity {
         helper = new VocabularySQLHelper(QuizActivity.this);
         list = helper.getAll(categoryID);
         Collections.shuffle(list);
-        total = list.size();
+        total = getIntent().getIntExtra("total", list.size());
         answered = 0;
         trueAnswer = 0;
         setContentView(R.layout.activity_quiz);
@@ -92,7 +92,7 @@ public class QuizActivity extends AppCompatActivity {
                 s += v.getEngsub();
                 s += ", ";
             }
-            Log.d("item", s);
+            Log.e("item", s);
             answered++;
             setQuestion(answeredSet);
         }
